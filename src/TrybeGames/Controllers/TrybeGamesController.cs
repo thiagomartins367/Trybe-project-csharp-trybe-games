@@ -117,16 +117,20 @@ public class TrybeGamesController
         }
     }
 
+    private bool IsValidBasicInput(string? input, string errorMessage)
+    {
+        if (input != null && input.Length > 0) return true;
+        Console.WriteLine(errorMessage);
+        return false;
+    }
+
     // 1. Crie a funcionalidde para adicionar uma nova pessoa jogadora ao banco de dados
     public void AddPlayer()
     {
-        Console.WriteLine("Informe o nome da pessoa jogadora:");
+        Console.Write("Informe o nome da pessoa jogadora: ");
         var input = Console.ReadLine();
-        if (input == null || input.Length == 0)
-        {
-            Console.WriteLine("Nome inválido! Tente novamente.");
-            return;
-        }
+        var isValidInput = IsValidBasicInput(input, "\n❌ Nome inválido! Tente novamente.\n");
+        if (!isValidInput) return;
         List<Player> players = database.Players;
         Player newPlayer = new();
         if (players.Count == 0)
@@ -141,18 +145,16 @@ public class TrybeGamesController
             newPlayer.Name = input;
         }
         database.Players.Add(newPlayer);
+        Console.WriteLine($"\n✅ Pessoa jogadora \x1b[1m{newPlayer.Name}\x1b[0m adicionada com sucesso!\n");
     }
 
     // 2. Crie a funcionalidade de adicionar um novo estúdio de jogos ao banco de dados
     public void AddGameStudio()
     {
-        Console.WriteLine("Informe o nome do estúdio de jogos:");
+        Console.Write("Informe o nome do estúdio de jogos: ");
         var input = Console.ReadLine();
-        if (input == null || input.Length == 0)
-        {
-            Console.WriteLine("Nome inválido! Tente novamente.");
-            return;
-        }
+        var isValidInput = IsValidBasicInput(input, "\n❌ Nome inválido! Tente novamente.\n");
+        if (!isValidInput) return;
         List<GameStudio> gameStudios = database.GameStudios;
         GameStudio gameStudio = new();
         if (gameStudios.Count == 0)
@@ -167,17 +169,18 @@ public class TrybeGamesController
             gameStudio.Name = input;
         }
         database.GameStudios.Add(gameStudio);
+        Console.WriteLine($"\n✅ Estúdio de jogos \x1b[1m{gameStudio.Name}\x1b[0m adicionado com sucesso!\n");
     }
 
     private string? GetGameNameInput()
     {
         Console.Write("Informe o nome do jogo: ");
         var gameNameInput = Console.ReadLine();
-        if (gameNameInput == null || gameNameInput.Length == 0)
-        {
-            Console.WriteLine("\n❌ Nome inválido! Tente novamente.\n");
-            return null;
-        }
+        var isValidGameNameInput = IsValidBasicInput(
+            gameNameInput,
+            "\n❌ Nome inválido! Tente novamente.\n"
+        );
+        if (!isValidGameNameInput) return null;
         return gameNameInput;
     }
 
@@ -192,12 +195,9 @@ public class TrybeGamesController
             DateTimeStyles.None,
             out DateTime releaseDate
         );
-        if (!isDateTime)
-        {
-            Console.WriteLine("\n❌ Data de lançamento inválida! Tente novamente.\n");
-            return null;
-        }
-        return releaseDate;
+        if (isDateTime) return releaseDate;
+        Console.WriteLine("\n❌ Data de lançamento inválida! Tente novamente.\n");
+        return null;
     }
 
     private GameType? GetGameTypeInput()
@@ -207,12 +207,9 @@ public class TrybeGamesController
         foreach (var item in gameTypes) Console.WriteLine((int)item + " - " + item);
         Console.Write("Tipo de jogo: ");
         var gameTypeInput = Console.ReadLine();
-        if (!int.TryParse(gameTypeInput, out int gameTypeInt))
-        {
-            Console.WriteLine("\n❌ Tipo de jogo inválido! Tente novamente.\n");
-            return null;
-        }
-        return (GameType)gameTypeInt;
+        if (int.TryParse(gameTypeInput, out int gameTypeInt)) return (GameType)gameTypeInt;
+        Console.WriteLine("\n❌ Tipo de jogo inválido! Tente novamente.\n");
+        return null;
     }
 
 
