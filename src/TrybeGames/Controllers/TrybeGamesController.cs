@@ -169,11 +169,76 @@ public class TrybeGamesController
         database.GameStudios.Add(gameStudio);
     }
 
+    private string? GetGameNameInput()
+    {
+        Console.Write("Informe o nome do jogo: ");
+        var gameNameInput = Console.ReadLine();
+        if (gameNameInput == null || gameNameInput.Length == 0)
+        {
+            Console.WriteLine("\n❌ Nome inválido! Tente novamente.\n");
+            return null;
+        }
+        return gameNameInput;
+    }
+
+    private DateTime? GetGameReleaseDateInput()
+    {
+        Console.Write("Informe a data de lançamento: ");
+        var releaseDateInput = Console.ReadLine();
+        var isDateTime = DateTime.TryParseExact(
+            releaseDateInput,
+            "dd/MM/yyyy",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.None,
+            out DateTime releaseDate
+        );
+        if (!isDateTime)
+        {
+            Console.WriteLine("\n❌ Data de lançamento inválida! Tente novamente.\n");
+            return null;
+        }
+        return releaseDate;
+    }
+
+    private GameType? GetGameTypeInput()
+    {
+        Console.WriteLine("Informe o tipo do jogo:");
+        GameType[] gameTypes = (GameType[])Enum.GetValues(typeof(GameType));
+        foreach (var item in gameTypes) Console.WriteLine((int)item + " - " + item);
+        Console.Write("Tipo de jogo: ");
+        var gameTypeInput = Console.ReadLine();
+        if (!int.TryParse(gameTypeInput, out int gameTypeInt))
+        {
+            Console.WriteLine("\n❌ Tipo de jogo inválido! Tente novamente.\n");
+            return null;
+        }
+        return (GameType)gameTypeInt;
+    }
+
+
     // 3. Crie a funcionalidade de adicionar novo Jogo ao Banco de dados
     public void AddGame()
     {
-        // implementar
-        Console.WriteLine("Ainda não é possível realizar essa funcionalidade!");
+        var gameName = GetGameNameInput();
+        if (gameName == null) return;
+        var releaseDate = GetGameReleaseDateInput();
+        if (releaseDate == null) return;
+        var gameType = GetGameTypeInput();
+        if (gameType == null) return;
+        List<Game> games = database.Games;
+        Game game = new();
+        if (games.Count == 0)
+            game.Id = 1;
+        else
+        {
+            var nextId = games[games.Count - 1].Id + 1;
+            game.Id = nextId;
+        }
+        game.Name = gameName;
+        game.ReleaseDate = (DateTime)releaseDate;
+        game.GameType = (GameType)gameType;
+        games.Add(game);
+        Console.WriteLine($"\n✅ Jogo \x1b[1m{gameName}\x1b[0m adicionado com sucesso!\n");
     }
 
     public void ChangeGameStudio(Game game)
