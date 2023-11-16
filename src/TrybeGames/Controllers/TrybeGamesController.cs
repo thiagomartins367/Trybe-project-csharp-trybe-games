@@ -134,16 +134,13 @@ public class TrybeGamesController
         List<Player> players = database.Players;
         Player newPlayer = new();
         if (players.Count == 0)
-        {
             newPlayer.Id = 1;
-            newPlayer.Name = input;
-        }
         else
         {
             var nextId = players[players.Count - 1].Id + 1;
             newPlayer.Id = nextId;
-            newPlayer.Name = input;
         }
+        newPlayer.Name = input;
         database.Players.Add(newPlayer);
         Console.WriteLine($"\n✅ Pessoa jogadora \x1b[1m{newPlayer.Name}\x1b[0m adicionada com sucesso!\n");
     }
@@ -158,16 +155,13 @@ public class TrybeGamesController
         List<GameStudio> gameStudios = database.GameStudios;
         GameStudio gameStudio = new();
         if (gameStudios.Count == 0)
-        {
             gameStudio.Id = 1;
-            gameStudio.Name = input;
-        }
         else
         {
             var nextId = gameStudios[gameStudios.Count - 1].Id + 1;
             gameStudio.Id = nextId;
-            gameStudio.Name = input;
         }
+        gameStudio.Name = input;
         database.GameStudios.Add(gameStudio);
         Console.WriteLine($"\n✅ Estúdio de jogos \x1b[1m{gameStudio.Name}\x1b[0m adicionado com sucesso!\n");
     }
