@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+WORKDIR /usr/src/build_trybe-games
+
+COPY . ./
+
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS production
+
+WORKDIR /usr/src/trybe-games
+
+COPY --from=build /usr/src/build_trybe-games/out .
+
+ENTRYPOINT while true; do echo "✅ Console app \e[1mTrybe Games\e[0m is ready to run!"; sleep 86400; done;
