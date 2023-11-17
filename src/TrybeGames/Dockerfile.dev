@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS development
+
+WORKDIR /usr/src/dev_trybe-games
+
+COPY . ./
+
+RUN dotnet restore
+
+ENTRYPOINT while true; do echo "✅ (DEV) Console app \e[1mTrybe Games\e[0m is ready to run!"; sleep 86400; done;
