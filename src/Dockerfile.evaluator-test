@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS evaluator-test
+
+WORKDIR /usr/src/evaluator-test_trybe-games
+
+COPY . ./
+
+RUN dotnet restore
+
+ENTRYPOINT while true; do dotnet test ./TrybeGames.Test.Test/TrybeGames.Test.Test.csproj; sleep 5; done;

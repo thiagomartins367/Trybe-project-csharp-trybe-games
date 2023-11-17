@@ -1,0 +1,69 @@
+version: "3.8"
+services:
+  dev_trybe-games:
+    container_name: dev_trybe-games
+    image: dev_trybe-games
+    build:
+      context: ./src/TrybeGames
+      dockerfile: Dockerfile.dev
+      target: development
+    working_dir: /usr/src/dev_trybe-games
+    restart: always
+    volumes:
+      - ./src/TrybeGames:/usr/src/dev_trybe-games
+      - /usr/src/dev_trybe-games/bin
+      - /usr/src/dev_trybe-games/obj
+    networks:
+      - dev_network-trybe-games
+
+  test_trybe-games:
+    container_name: test_trybe-games
+    image: test_trybe-games
+    build:
+      context: ./src
+      dockerfile: Dockerfile.test
+      target: test
+    working_dir: /usr/src/test_trybe-games
+    restart: always
+    volumes:
+      - ./src/TrybeGames.Test:/usr/src/test_trybe-games/TrybeGames.Test
+      - ./src/TrybeGames:/usr/src/test_trybe-games/TrybeGames
+      - /usr/src/test_trybe-games/TrybeGames.Test/bin
+      - /usr/src/test_trybe-games/TrybeGames.Test/obj
+      - /usr/src/test_trybe-games/TrybeGames/bin
+      - /usr/src/test_trybe-games/TrybeGames/obj
+    networks:
+      - test_network-trybe-games
+
+  evaluator-test_trybe-games:
+    container_name: evaluator-test_trybe-games
+    image: evaluator-test_trybe-games
+    build:
+      context: ./src
+      dockerfile: Dockerfile.evaluator-test
+      target: evaluator-test
+    working_dir: /usr/src/evaluator-test_trybe-games
+    restart: always
+    volumes:
+      - ./src:/usr/src/evaluator-test_trybe-games
+      - /usr/src/evaluator-test_trybe-games/TrybeGames.Test.Test/bin
+      - /usr/src/evaluator-test_trybe-games/TrybeGames.Test.Test/obj
+      - /usr/src/evaluator-test_trybe-games/TrybeGames.Test/bin
+      - /usr/src/evaluator-test_trybe-games/TrybeGames.Test/obj
+      - /usr/src/evaluator-test_trybe-games/TrybeGames/bin
+      - /usr/src/evaluator-test_trybe-games/TrybeGames/obj
+    networks:
+      - evaluator-test_network-trybe-games
+
+networks:
+  dev_network-trybe-games:
+    name: dev_network-trybe-games
+    external: false
+  
+  test_network-trybe-games:
+    name: test_network-trybe-games
+    external: false
+
+  evaluator-test_network-trybe-games:
+    name: evaluator-test_network-trybe-games
+    external: false

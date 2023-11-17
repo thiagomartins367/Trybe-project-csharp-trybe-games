@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  trybe-games:
+    container_name: trybe-games
+    image: trybe-games
+    build:
+      context: ./src/TrybeGames
+      dockerfile: Dockerfile.prod
+    working_dir: /usr/src/trybe-games
+    restart: always
+    networks:
+      - network-trybe-games
+
+networks:
+  network-trybe-games:
+    name: network-trybe-games
+    external: false
