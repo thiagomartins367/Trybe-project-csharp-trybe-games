@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS test
+
+WORKDIR /usr/src/test_trybe-games
+
+COPY . ./
+
+RUN dotnet restore
+
+ENTRYPOINT while true; do dotnet test ./TrybeGames.Test/TrybeGames.Test.csproj; sleep 5; done;
